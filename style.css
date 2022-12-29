@@ -1,5 +1,5 @@
 #container {
-    background-color: yellowgreen;
+    /* background-color: yellowgreen; */
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
     grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
@@ -7,21 +7,22 @@
     justify-items: center;
     gap: 1px;
     width: 1px;
-
+    max-width: 960px;
 }
 
 .square {
-    background-color: slateblue;
+    background-color: gray;
     text-align: center;
     align-content: center;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
 }
 
 div.square:hover {
-    background-color: red;
+    background-color: black;
 }
 
-.red {
-    background-color: red;
+.colored {
+    background-color: black;
 }
