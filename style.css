@@ -17,3 +17,11 @@
     width: 16px;
     height: 16px;
 }
+
+div.square:hover {
+    background-color: red;
+}
+
+.red {
+    background-color: red;
+}
