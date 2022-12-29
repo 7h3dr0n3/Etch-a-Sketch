@@ -19,8 +19,23 @@ square.forEach(element => {
     });
 });
 
-//add button at top of page
+// ask no of square (max=100)per side for the new grid,
+// existing grid should be removed and a new grid should be generated 
 
 const button = document.createElement('button');
 button.innerText = "Set new Square/side";
 document.body.insertBefore(button, container);
+
+button.addEventListener('click', (event) => {
+    const gridSquares = prompt("Enter No of Squares per Side?", 16);
+    if (gridSquares > 100) {
+        gridSquares = prompt("Enter value should be less than 100? ", 16);
+    }
+});
+
+
+
+
+
+
+
