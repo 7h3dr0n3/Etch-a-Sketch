@@ -1,0 +1,19 @@
+#container {
+    background-color: yellowgreen;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    text-align: center;
+    justify-items: center;
+    gap: 1px;
+    width: 1px;
+
+}
+
+.square {
+    background-color: slateblue;
+    text-align: center;
+    align-content: center;
+    width: 16px;
+    height: 16px;
+}
