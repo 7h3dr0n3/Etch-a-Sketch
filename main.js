@@ -1,3 +1,5 @@
+
+const sketch = document.getElementById('sketch');
 const container = document.getElementById("container");
 let rows = 16, cols = 16;
 
@@ -8,7 +10,7 @@ changeColor();
 //insert button at top and event listener
 const button = document.createElement('button');
 button.innerText = "Set new Square/side";
-document.body.insertBefore(button, container);
+document.body.insertBefore(button, sketch);
 
 
 // create 16x16 grid of square div's
@@ -17,7 +19,7 @@ function createSquare(rows, cols) {
     for (let i = 0; i < rows * cols; i++) {
         const node = document.createElement('div');
         node.classList.add('square');
-        node.innerText = `${i + 1}`;
+        // node.innerText = `${i + 1}`;
         container.appendChild(node);
     }
 
@@ -32,8 +34,8 @@ function newGrid(rows, cols) {
         auto += prop;
     }
     // console.log(auto);
-    container.style.gridTemplateColumns = auto;
-    container.style.gridTemplateRows = auto;
+    container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
     createSquare(rows, cols);
 };
 
@@ -43,8 +45,8 @@ function changeColor() {
     const square = document.querySelectorAll('.square');
     square.forEach(element => {
         element.addEventListener("mouseover", (event) => {
-            const toRedSquare = event.target;
-            toRedSquare.classList.add('colored');
+            const toColor = event.target;
+            toColor.classList.add('colored');
 
         });
     });
