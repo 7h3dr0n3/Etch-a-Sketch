@@ -1,22 +1,35 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: grey;
+
+}
+
+#sketch,
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 #container {
     /* background-color: yellowgreen; */
     display: grid;
-    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-    grid-template-rows: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
-    text-align: center;
-    justify-items: center;
-    gap: 1px;
-    width: 1px;
+    width: 500px;
+    height: 500px;
     max-width: 960px;
+    border: 1px inset black;
 }
 
 .square {
-    background-color: gray;
-    text-align: center;
-    align-content: center;
-    width: 20px;
-    height: 20px;
-    font-size: 10px;
+    background-color: white;
+    width: 100%;
+    height: 100%;
 }
 
 div.square:hover {
