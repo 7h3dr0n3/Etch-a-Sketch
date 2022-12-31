@@ -33,10 +33,10 @@ header {
     height: 100%;
 }
 
-div.square:hover {
+.black {
     background-color: black;
 }
 
-.colored {
-    background-color: black;
+.active {
+    background-color: blue;
 }

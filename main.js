@@ -1,4 +1,4 @@
-
+const cls = ["black", "random"];
 const sketch = document.getElementById('sketch');
 const container = document.getElementById("container");
 let rows = 16, cols = 16;
@@ -20,9 +20,16 @@ settings.appendChild(clear);
 //clear
 clear.addEventListener('click', (e) => {
     const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.classList.remove('colored'));
+    allPrevSquares.forEach(element => element.classList.remove('black'));
 });
 
+//eraser
+const eraser = document.createElement('button');
+eraser.innerText = "Eraser";
+settings.appendChild(eraser);
+eraser.addEventListener('click', (event) => {
+    event.target.classList.toggle("active");
+});
 
 // create 16x16 grid of square div's
 function createSquare(rows, cols) {
@@ -51,14 +58,30 @@ function changeColor() {
     square.forEach(element => {
         element.addEventListener("mouseover", (event) => {
             const toColor = event.target;
-            toColor.classList.add('colored');
+            if (eraser.classList.contains('active')) {
+                toColor.classList.remove(...cls);
+            } else {
+                toColor.classList.add('black');
+            }
+        });
+    });
+
+};
+
+// eraser to white
+function toErase() {
+    const square = document.querySelectorAll('.square');
+    square.forEach(element => {
+        element.addEventListener("mouseover", (event) => {
+            const toColor = event.target;
+            toColor.classList.remove(...cls);
 
         });
     });
 
 };
 
-//hover listener with callbacks
+//size change listener with callbacks
 
 button.addEventListener('click', (event) => {
 
@@ -70,8 +93,10 @@ button.addEventListener('click', (event) => {
     cols = gridSquares;
 
     const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.remove());
+    allPrevSquares.forEach(element => element.remove(...cls));
 
     newGrid(rows, cols);
-    changeColor()
+    changeColor();
 });
+
+
