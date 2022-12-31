@@ -10,8 +10,18 @@ changeColor();
 //insert button at top and event listener
 const settings = document.querySelector('#settings');
 const button = document.createElement('button');
-button.innerText = "Set new Square/side";
+button.innerText = "Set Size";
 settings.appendChild(button);
+
+const clear = document.createElement('button');
+clear.innerText = "Clear";
+settings.appendChild(clear);
+
+//clear
+clear.addEventListener('click', (e) => {
+    const allPrevSquares = document.querySelectorAll('.square');
+    allPrevSquares.forEach(element => element.classList.remove('colored'));
+});
 
 
 // create 16x16 grid of square div's
