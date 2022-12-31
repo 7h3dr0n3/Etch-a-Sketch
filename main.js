@@ -8,9 +8,10 @@ newGrid(rows, cols);
 changeColor();
 
 //insert button at top and event listener
+const settings = document.querySelector('#settings');
 const button = document.createElement('button');
 button.innerText = "Set new Square/side";
-document.body.insertBefore(button, sketch);
+settings.appendChild(button);
 
 
 // create 16x16 grid of square div's
@@ -28,12 +29,6 @@ function createSquare(rows, cols) {
 
 //create new grid
 function newGrid(rows, cols) {
-    let auto = "";
-    for (let i = 0; i < rows; i++) {
-        let prop = "auto "
-        auto += prop;
-    }
-    // console.log(auto);
     container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
     container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
     createSquare(rows, cols);
