@@ -1,4 +1,4 @@
-const cls = ["black", "lighten"];
+
 const sketch = document.getElementById('sketch');
 const container = document.getElementById("container");
 let rows = 16, cols = 16;
@@ -10,9 +10,9 @@ changeColor();
 //settings
 //insert button at top and event listener
 const settings = document.querySelector('#settings');
-const button = document.createElement('button');
-button.innerText = "Set Size";
-settings.appendChild(button);
+const size = document.createElement('button');
+size.innerText = "Set Size";
+settings.appendChild(size);
 
 const clear = document.createElement('button');
 clear.innerText = "Clear";
@@ -29,7 +29,13 @@ settings.appendChild(lightening);
 //clear
 clear.addEventListener('click', (e) => {
     const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.classList.remove(...cls));
+    allPrevSquares.forEach(element => {
+        element.style.backgroundColor = "#FFFFFF";
+        element.removeAttribute('lighten');
+    });
+    eraser.classList.remove("active");
+    lightening.classList.remove("active");
+
 });
 
 //eraser
@@ -73,27 +79,24 @@ function changeColor() {
         element.addEventListener("mouseover", (event) => {
             const toColor = event.target;
             if (eraser.classList.contains('active')) {
-                lightening.classList.remove("active");
-                toColor.classList.remove(...cls);
-            } else if (lightening.classList.contains('active') && toColor.style.backgroundColor === "") {
-                eraser.classList.remove('active');
-                toColor.classList.add('lighten');
+                element.style.backgroundColor = "#FFFFFF";
+                element.removeAttribute('lighten');
+            } else if (lightening.classList.contains('active')) {
+                const val = element.getAttribute('lighten');
+                console.log(val);
+                const light = parseInt(val) + 10;
+                if (light <= 100) {
+                    element.setAttribute("lighten", `${light}`);
+                    const backColor = LightenColor(`${element.style.backgroundColor}`, light);
+                    element.style.backgroundColor = `${backColor}`;
+                    if (light == 100) {
+                        element.removeAttribute('lighten');
+                    }
+                }
             } else {
-                toColor.classList.add('black');
+                element.style.backgroundColor = "#000000";
+                element.setAttribute("lighten", `0`);
             }
-        });
-    });
-
-};
-
-// eraser to white
-function toErase() {
-    const square = document.querySelectorAll('.square');
-    square.forEach(element => {
-        element.addEventListener("mouseover", (event) => {
-            const toColor = event.target;
-            toColor.classList.remove(...cls);
-
         });
     });
 
@@ -101,7 +104,7 @@ function toErase() {
 
 //size change listener with callbacks
 
-button.addEventListener('click', (event) => {
+size.addEventListener('click', (event) => {
 
     const gridSquares = prompt("Enter No of Squares per Side?", 16);
     if (gridSquares > 100) {
@@ -111,8 +114,19 @@ button.addEventListener('click', (event) => {
     cols = gridSquares;
 
     const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.classlist.remove(...cls));
+    allPrevSquares.forEach(element => element.style.backgroundColor = "#FFFFFF");
 
     newGrid(rows, cols);
     changeColor();
 });
+
+
+//lighten color 
+function LightenColor(color, percent) {
+    var num = parseInt(color.replace("#", ""), 16),
+        amt = Math.round(2.55 * parseInt(percent)),
+        R = (num >> 16) + amt,
+        B = (num >> 8 & 0x00FF) + amt,
+        G = (num & 0x0000FF) + amt;
+    return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
+};
