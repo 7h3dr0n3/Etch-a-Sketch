@@ -1,4 +1,4 @@
-const cls = ["black", "random"];
+const cls = ["black", "lighten"];
 const sketch = document.getElementById('sketch');
 const container = document.getElementById("container");
 let rows = 16, cols = 16;
@@ -7,6 +7,7 @@ let rows = 16, cols = 16;
 newGrid(rows, cols);
 changeColor();
 
+//settings
 //insert button at top and event listener
 const settings = document.querySelector('#settings');
 const button = document.createElement('button');
@@ -17,18 +18,31 @@ const clear = document.createElement('button');
 clear.innerText = "Clear";
 settings.appendChild(clear);
 
-//clear
-clear.addEventListener('click', (e) => {
-    const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.classList.remove('black'));
-});
-
-//eraser
 const eraser = document.createElement('button');
 eraser.innerText = "Eraser";
 settings.appendChild(eraser);
+
+const lightening = document.createElement('button');
+lightening.innerText = "Lighten";
+settings.appendChild(lightening);
+
+//clear
+clear.addEventListener('click', (e) => {
+    const allPrevSquares = document.querySelectorAll('.square');
+    allPrevSquares.forEach(element => element.classList.remove(...cls));
+});
+
+//eraser
 eraser.addEventListener('click', (event) => {
     event.target.classList.toggle("active");
+    lightening.classList.remove("active");
+
+});
+
+//lightening
+lightening.addEventListener('click', (event) => {
+    event.target.classList.toggle("active");
+    eraser.classList.remove("active");
 });
 
 // create 16x16 grid of square div's
@@ -59,7 +73,11 @@ function changeColor() {
         element.addEventListener("mouseover", (event) => {
             const toColor = event.target;
             if (eraser.classList.contains('active')) {
+                lightening.classList.remove("active");
                 toColor.classList.remove(...cls);
+            } else if (lightening.classList.contains('active') && toColor.style.backgroundColor === "") {
+                eraser.classList.remove('active');
+                toColor.classList.add('lighten');
             } else {
                 toColor.classList.add('black');
             }
@@ -93,10 +111,8 @@ button.addEventListener('click', (event) => {
     cols = gridSquares;
 
     const allPrevSquares = document.querySelectorAll('.square');
-    allPrevSquares.forEach(element => element.remove(...cls));
+    allPrevSquares.forEach(element => element.classlist.remove(...cls));
 
     newGrid(rows, cols);
     changeColor();
 });
-
-
