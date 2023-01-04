@@ -40,8 +40,9 @@ clear.addEventListener('click', (e) => {
     const allPrevSquares = document.querySelectorAll('.square');
     allPrevSquares.forEach(element => {
         element.style.backgroundColor = "#FFFFFF";
+        element.setAttribute('data-color', `${element.style.backgroundColor}`);
         element.removeAttribute('lighten');
-        element.removeAttribute('data-color');
+        element.removeAttribute('darken');
     });
     eraser.classList.remove("active");
     lightening.classList.remove("active");
@@ -102,6 +103,7 @@ function newGrid(rows, cols) {
     const allPrevSquares = document.querySelectorAll('.square');
     allPrevSquares.forEach(element => {
         element.style.backgroundColor = "#FFFFFF";
+        element.setAttribute('data-color', `${element.style.backgroundColor}`);
     });
 };
 
@@ -114,8 +116,10 @@ function changeColor() {
             const toColor = event.target;
             if (eraser.classList.contains('active')) {
                 element.style.backgroundColor = "#FFFFFF";
+                element.setAttribute('data-color', `${element.style.backgroundColor}`);
+                element.removeAttribute('darken');
                 element.removeAttribute('lighten');
-                element.removeAttribute('data-color');
+
             } else if (lightening.classList.contains('active')) {
                 const val = element.getAttribute('lighten'),
                     col = element.getAttribute('data-color');
@@ -123,25 +127,54 @@ function changeColor() {
                 const light = parseInt(val) + 10;
                 if (light <= 100) {
                     element.setAttribute("lighten", `${light}`);
-                    const prevColor = rgbToHex(col);
-                    console.log("prev color: ", prevColor, light);
-                    const newColor = lightenColor(`${prevColor}`, light);
-                    console.log("new Color: ", newColor)
+
+                    const prevColor = rgbToHex(col),
+                        newColor = lightenColor(`${prevColor}`, light);
+
                     element.style.backgroundColor = `${newColor}`;
+
                     if (light == 100) {
                         element.style.backgroundColor = "#FFFFFF";
                         element.removeAttribute('lighten');
-                        element.removeAttribute('data-color');
+                        element.setAttribute('data-color', `${element.style.backgroundColor}`);
                     }
+                }
+            } else if (darkening.classList.contains('active')) {
+                if (element.hasAttribute('darken')) {
+                    const val = element.getAttribute('darken');
+                    const col = element.getAttribute('data-color');
+                    const darkVal = parseInt(val) - 10;
+                    if (darkVal >= -100) {
+                        element.setAttribute("darken", `${darkVal}`);
+                        const prevColor = rgbToHex(col),
+                            newColor = lightenColor(`${prevColor}`, darkVal);
+                        console.log(prevColor, newColor);
+                        element.style.backgroundColor = `${newColor}`;
+                        if (darkVal == -100) {
+                            element.style.backgroundColor = "#000000"
+                            element.removeAttribute('darken');
+                            element.setAttribute('data-color', `${element.style.backgroundColor}`);
+                            element.setAttribute('lighten', '0');
+                        }
+                    }
+                } else {
+                    const col = element.getAttribute('data-color');
+                    const darkVal = -10;
+                    element.setAttribute('darken', '-10');
+                    const prevColor = rgbToHex(col),
+                        newColor = lightenColor(`${prevColor}`, darkVal);
+                    console.log(prevColor, newColor);
+                    element.style.backgroundColor = `${newColor}`;
                 }
             } else if (randomColorBtn.classList.contains('active')) {
                 element.style.backgroundColor = createRandomColor();
                 element.setAttribute("lighten", `0`);
+                element.setAttribute("darken", `0`);
                 element.setAttribute("data-color", `${element.style.backgroundColor}`);
             } else {
                 element.style.backgroundColor = "#000000";
-                element.setAttribute("lighten", `0`);
                 element.setAttribute("data-color", `${element.style.backgroundColor}`);
+                element.setAttribute("lighten", `0`);
             }
         });
     });
