@@ -45,7 +45,8 @@ clear.addEventListener('click', (e) => {
     });
     eraser.classList.remove("active");
     lightening.classList.remove("active");
-
+    darkening.classList.remove("active");
+    randomColorBtn.classList.remove('active');
 });
 
 //eraser
@@ -53,6 +54,7 @@ eraser.addEventListener('click', (event) => {
     event.target.classList.toggle("active");
     lightening.classList.remove("active");
     randomColorBtn.classList.remove('active');
+    darkening.classList.remove("active");
 });
 
 //lightening
@@ -60,6 +62,15 @@ lightening.addEventListener('click', (event) => {
     event.target.classList.toggle("active");
     eraser.classList.remove("active");
     randomColorBtn.classList.remove('active');
+    darkening.classList.remove("active");
+});
+
+//darkening
+darkening.addEventListener('click', (event) => {
+    event.target.classList.toggle("active");
+    eraser.classList.remove("active");
+    randomColorBtn.classList.remove('active');
+    lightening.classList.remove("active");
 });
 
 //random Color
@@ -67,6 +78,7 @@ randomColorBtn.addEventListener('click', (event) => {
     event.target.classList.toggle('active');
     lightening.classList.remove("active");
     eraser.classList.remove("active");
+    darkening.classList.remove("active");
 })
 
 // create 16x16 grid of square div's
