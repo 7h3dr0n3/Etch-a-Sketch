@@ -4,6 +4,7 @@ const container = document.getElementById("container");
 let rows = 16, cols = 16;
 
 //callbacks with default
+
 newGrid(rows, cols);
 changeColor();
 
@@ -81,6 +82,10 @@ function newGrid(rows, cols) {
     container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
     container.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
     createSquare(rows, cols);
+    const allPrevSquares = document.querySelectorAll('.square');
+    allPrevSquares.forEach(element => {
+        element.style.backgroundColor = "#FFFFFF";
+    });
 };
 
 
@@ -99,10 +104,10 @@ function changeColor() {
                 const light = parseInt(val) + 10;
                 if (light <= 100) {
                     element.setAttribute("lighten", `${light}`);
-                    const prevColor = element.style.backgroundColor;
-                    console.log(prevColor);
-                    const newColor = lightenColor(`${prevColor}`, light);
-                    console.log(newColor)
+                    const prevColor = rgbToHex(element.style.backgroundColor);
+                    console.log(prevColor, light);
+                    const newColor = lightenColor(`${prevColor}`, 10);
+
                     element.style.backgroundColor = `${newColor}`;
                     if (light == 100) {
                         element.removeAttribute('lighten');
@@ -132,6 +137,7 @@ size.addEventListener('click', (event) => {
     cols = gridSquares;
 
     const allPrevSquares = document.querySelectorAll('.square');
+    allPrevSquares.forEach(element => element.remove());
     allPrevSquares.forEach(element => element.style.backgroundColor = "#FFFFFF");
 
     newGrid(rows, cols);
@@ -141,13 +147,11 @@ size.addEventListener('click', (event) => {
 
 //lighten color 
 function lightenColor(color, percent) {
-    console.log(color, percent);
     let num = parseInt(color.replace("#", ""), 16),
         amt = Math.round(2.55 * parseInt(percent)),
         R = (num >> 16) + amt,
         B = (num >> 8 & 0x00FF) + amt,
         G = (num & 0x0000FF) + amt;
-    console.log(num, amt, R, B, G);
     return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
 };
 
@@ -161,3 +165,21 @@ function createRandomColor() {
     let randCol = randomNum.padStart('6', 0);
     return '#' + randCol;
 };
+
+//convert rgb to hex
+
+function valueToHex(val) {
+    const hex = val.toString(16);
+    return hex;
+}
+
+function rgbToHex(col) {
+    const str = col.toString();
+    const arr = str.substring(str.indexOf('(') + 1, str.indexOf(')')).split(', ');
+    // console.log(arr);
+    let r = parseInt(arr[0]),
+        b = parseInt(arr[1]),
+        g = parseInt(arr[2]);
+    const hex = '#' + valueToHex(r) + valueToHex(g) + valueToHex(b);
+    return hex;
+}
