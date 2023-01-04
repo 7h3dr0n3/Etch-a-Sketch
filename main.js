@@ -27,6 +27,10 @@ const lightening = document.createElement('button');
 lightening.innerText = "Lighten";
 settings.appendChild(lightening);
 
+const darkening = document.createElement('button');
+darkening.innerText = "Darken";
+settings.appendChild(darkening);
+
 const randomColorBtn = document.createElement('button');
 randomColorBtn.innerText = "Random Color";
 settings.appendChild(randomColorBtn);
