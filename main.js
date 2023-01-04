@@ -26,6 +26,10 @@ const lightening = document.createElement('button');
 lightening.innerText = "Lighten";
 settings.appendChild(lightening);
 
+const randomColorBtn = document.createElement('button');
+randomColorBtn.innerText = "Random Color";
+settings.appendChild(randomColorBtn);
+
 //clear
 clear.addEventListener('click', (e) => {
     const allPrevSquares = document.querySelectorAll('.square');
@@ -42,14 +46,22 @@ clear.addEventListener('click', (e) => {
 eraser.addEventListener('click', (event) => {
     event.target.classList.toggle("active");
     lightening.classList.remove("active");
-
+    randomColorBtn.classList.remove('active');
 });
 
 //lightening
 lightening.addEventListener('click', (event) => {
     event.target.classList.toggle("active");
     eraser.classList.remove("active");
+    randomColorBtn.classList.remove('active');
 });
+
+//random Color
+randomColorBtn.addEventListener('click', (event) => {
+    event.target.classList.toggle('active');
+    lightening.classList.remove("active");
+    eraser.classList.remove("active");
+})
 
 // create 16x16 grid of square div's
 function createSquare(rows, cols) {
@@ -83,16 +95,22 @@ function changeColor() {
                 element.removeAttribute('lighten');
             } else if (lightening.classList.contains('active')) {
                 const val = element.getAttribute('lighten');
-                console.log(val);
+                // console.log(val);
                 const light = parseInt(val) + 10;
                 if (light <= 100) {
                     element.setAttribute("lighten", `${light}`);
-                    const backColor = LightenColor(`${element.style.backgroundColor}`, light);
-                    element.style.backgroundColor = `${backColor}`;
+                    const prevColor = element.style.backgroundColor;
+                    console.log(prevColor);
+                    const newColor = lightenColor(`${prevColor}`, light);
+                    console.log(newColor)
+                    element.style.backgroundColor = `${newColor}`;
                     if (light == 100) {
                         element.removeAttribute('lighten');
                     }
                 }
+            } else if (randomColorBtn.classList.contains('active')) {
+                element.style.backgroundColor = createRandomColor();
+                element.setAttribute("lighten", `0`);
             } else {
                 element.style.backgroundColor = "#000000";
                 element.setAttribute("lighten", `0`);
@@ -122,11 +140,24 @@ size.addEventListener('click', (event) => {
 
 
 //lighten color 
-function LightenColor(color, percent) {
-    var num = parseInt(color.replace("#", ""), 16),
+function lightenColor(color, percent) {
+    console.log(color, percent);
+    let num = parseInt(color.replace("#", ""), 16),
         amt = Math.round(2.55 * parseInt(percent)),
         R = (num >> 16) + amt,
         B = (num >> 8 & 0x00FF) + amt,
         G = (num & 0x0000FF) + amt;
+    console.log(num, amt, R, B, G);
     return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
+};
+
+
+//Random Color
+function createRandomColor() {
+    const maxColorValue = 0xFFFFFF;
+    let randomNum = Math.random() * maxColorValue;
+    randomNum = Math.floor(randomNum);
+    randomNum = randomNum.toString(16);
+    let randCol = randomNum.padStart('6', 0);
+    return '#' + randCol;
 };
