@@ -37,6 +37,7 @@ clear.addEventListener('click', (e) => {
     allPrevSquares.forEach(element => {
         element.style.backgroundColor = "#FFFFFF";
         element.removeAttribute('lighten');
+        element.removeAttribute('data-color');
     });
     eraser.classList.remove("active");
     lightening.classList.remove("active");
@@ -98,27 +99,33 @@ function changeColor() {
             if (eraser.classList.contains('active')) {
                 element.style.backgroundColor = "#FFFFFF";
                 element.removeAttribute('lighten');
+                element.removeAttribute('data-color');
             } else if (lightening.classList.contains('active')) {
-                const val = element.getAttribute('lighten');
+                const val = element.getAttribute('lighten'),
+                    col = element.getAttribute('data-color');
                 // console.log(val);
                 const light = parseInt(val) + 10;
                 if (light <= 100) {
                     element.setAttribute("lighten", `${light}`);
-                    const prevColor = rgbToHex(element.style.backgroundColor);
-                    console.log(prevColor, light);
-                    const newColor = lightenColor(`${prevColor}`, 10);
-
+                    const prevColor = rgbToHex(col);
+                    console.log("prev color: ", prevColor, light);
+                    const newColor = lightenColor(`${prevColor}`, light);
+                    console.log("new Color: ", newColor)
                     element.style.backgroundColor = `${newColor}`;
                     if (light == 100) {
+                        element.style.backgroundColor = "#FFFFFF";
                         element.removeAttribute('lighten');
+                        element.removeAttribute('data-color');
                     }
                 }
             } else if (randomColorBtn.classList.contains('active')) {
                 element.style.backgroundColor = createRandomColor();
                 element.setAttribute("lighten", `0`);
+                element.setAttribute("data-color", `${element.style.backgroundColor}`);
             } else {
                 element.style.backgroundColor = "#000000";
                 element.setAttribute("lighten", `0`);
+                element.setAttribute("data-color", `${element.style.backgroundColor}`);
             }
         });
     });
@@ -146,14 +153,45 @@ size.addEventListener('click', (event) => {
 
 
 //lighten color 
-function lightenColor(color, percent) {
-    let num = parseInt(color.replace("#", ""), 16),
-        amt = Math.round(2.55 * parseInt(percent)),
-        R = (num >> 16) + amt,
-        B = (num >> 8 & 0x00FF) + amt,
-        G = (num & 0x0000FF) + amt;
-    return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (B < 255 ? B < 1 ? 0 : B : 255) * 0x100 + (G < 255 ? G < 1 ? 0 : G : 255)).toString(16).slice(1);
-};
+function lightenColor(colorCode, amount) {
+    console.log('infunc', colorCode, amount);
+    let usePound = false;
+    amount *= 2.5;
+    if (colorCode[0] == "#") {
+        colorCode = colorCode.slice(1);
+        usePound = true;
+    }
+    const num = parseInt(colorCode, 16);
+    let r = (num >> 16) + amount;
+
+    if (r > 255) {
+        r = 255;
+    } else if (r < 0) {
+        r = 0;
+    }
+
+    let b = ((num >> 8) & 0x00FF) + amount;
+
+    if (b > 255) {
+        b = 255;
+    } else if (b < 0) {
+        b = 0;
+    }
+
+    let g = (num & 0x0000FF) + amount;
+
+    if (g > 255) {
+        g = 255;
+    } else if (g < 0) {
+        g = 0;
+    }
+    let color = (g | (b << 8) | (r << 16)).toString(16);
+    while (color.length < 6) {
+        color = 0 + color;
+    }
+    console.log(color);
+    return (usePound ? '#' : '') + color;
+}
 
 
 //Random Color
